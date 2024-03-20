@@ -1,14 +1,11 @@
 #ifndef PWM_H
 #define PWM_H
 
-// Include any necessary headers here
+#include <inttypes.h>
 
-// Define any constants or macros here
+void TCA0_init(void);
+void PORT_init(void);
+void speed_controll(uint8_t persentage);
 
-// Declare any function prototypes here
-
-// Define any structures or types here
-
-// Define any global variables here (if needed)
 
 #endif // PWM_H
