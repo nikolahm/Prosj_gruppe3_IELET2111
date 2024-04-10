@@ -26,21 +26,9 @@ void speed_controll_7 (uint8_t persentage);
 
 
 int main(void)
-{
-	PORT_init();
-	TCA1_init();
-	TCA0_init();	
+{	
 	while (1)
 	{
-		speed_controll_0(20);
-		speed_controll_1(30);
-		speed_controll_2(20);
-		speed_controll_3(50);
-		speed_controll_4(20);
-		speed_controll_5(50);
-		
-		speed_controll_6(50);
-		speed_controll_7(20);
 	}
 }
 
