@@ -16,23 +16,18 @@
 #include <avr/eeprom.h>
 #include "uart.h"
 #include "switchstates1.h"
-void speed_controll_0(int i){i++;}
-void speed_controll_1(int i){i++;}
-void speed_controll_2(int i){i++;}
-void speed_controll_3(int i){i++;}
-void speed_controll_4(int i){i++;}
-void speed_controll_5(int i){i++;}
-void speed_controll_6(int i){i++;}
-void speed_controll_7(int i){i++;}
+#include "eeprommem.h"
+#include "PWM.h"
 
 
 void startMenu(){
+	automaticspeed();
+	
+			
 	switch (start_var)
 	{
 		case 1:
-		
 		modesMenu();
-		
 		break;
 		
 		case 2:
@@ -54,9 +49,10 @@ void startMenu(){
 		printf("3 = Configure address\r\n");
 		start_var = compareCommands(command,choicearray,3);
 		break;
-	}
-	automaticspeed();
-}
+		}
+	
+		}
+
 
 void modesMenu(){
 	switch (modes_var)
@@ -166,16 +162,16 @@ void percentageVifte() {
 		} else {
 		// Conversion successful
 		// Use percentage_val
-		printf("Percentage value: %d\n", percentage_val);
-
 		// Check if the value is within the range of 0-100
 		if (percentage_val >= 0 && percentage_val <= 100) {
 			// Set a variable with the value of percentage_val
+			printf("Percentage value: %d\n", percentage_val);
 			fanspeed_val = percentage_val;
+			printf(percentage_val);
 			set_speed_flag = true;
 			} else {
 			// Value is out of range
-			printf("Error: Value too high, please select within the range of 0-100\n");
+			printf("Error: Value out of range, please select within the range of 0-100\n");
 		}
 	}
 	if (compareCommands(command, choicearray, 5) == 1) {
@@ -188,58 +184,84 @@ void fan_choice(){
 	switch(fan_var)
 	{
 		case 1:
-		printf("Fan 1 set to :",fanspeed_val);
+		printf("Fan 1 set to :%d\r\n",fanspeed_val); 
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
+		printf(percentage_val);
 		speed_controll_0(fanspeed_val);
+		printf(fanspeed_val);
 		fan_var=255;
+		set_speed_flag = false;
 		break;
+		
 		case 2:
-		printf("Fan 2 set to :",fanspeed_val);
+		printf("Fan 2 set to :%d\r\n",fanspeed_val);
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
 		speed_controll_1(fanspeed_val);
+		set_speed_flag = false;
 		fan_var=255;
 		break;
+		
 		case 3:
-		printf("Fan 3 set to :",fanspeed_val);
+		printf("Fan 3 set to :%d\r\n",fanspeed_val);
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
 		speed_controll_2(fanspeed_val);
 		fan_var=255;
+		set_speed_flag = false;
 		break;
+		
 		case 4:
-		printf("Fan 4 set to :",fanspeed_val);
+		printf("Fan 4 set to :%d\r\n",fanspeed_val);
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
 		fan_var=255;
 		speed_controll_3(fanspeed_val);
 		set_speed_flag = false;
 		break;
+		
 		case 5:
-		printf("Fan 5 set to :",fanspeed_val);
+		printf("Fan 5 set to :%d\r\n",fanspeed_val);
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
 		speed_controll_4(fanspeed_val);
 		set_speed_flag = false;
 		fan_var=255;
 		break;
+		
 		case 6:
-		printf("Fan 6 set to :",fanspeed_val);
+		printf("Fan 6 set to :%d\r\n",fanspeed_val);
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
 		speed_controll_5(fanspeed_val);
+		set_speed_flag = false;
 		fan_var=255;
 		break;
+		
 		case 7:
-		printf("Fan 7 set to :",fanspeed_val);
+		printf("Fan 7 set to :%d\r\n",fanspeed_val);
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
 		speed_controll_6(fanspeed_val);
 		fan_var=255;
+		set_speed_flag = false;
 		break;
+		
 		case 8:
-		printf("Fan 8 set to :",percentage_val);
+		printf("Fan 8 set to :%d\r\n",percentage_val);
 		printf("\r\n");
+		printf("Choose your next percentage:\r\n");
 		speed_controll_7(percentage_val);
 		fan_var=255;
+		set_speed_flag = false;
 		break;
+		
 		case 9:
+		printf("Going Back->");
 		manual_var = 255;
 		break;
+		
 		default:
 		printf(("Choose your fan\r\n" ));
 		printf(("1 = Fan 1\r\n"));
@@ -253,42 +275,36 @@ void fan_choice(){
 		printf(("9 = Go Back->\r\n"));
 		
 		fan_var = compareCommands(command,choicearray,9);
-
-		if (compareCommands(command, choicearray, 9) == 9){
-			manual_var=255;
-		}
-		;
 	}
 }
 void dataMenu(){
 	switch (data_var)
 	{
 		case 1:
-		printf("Read data is\r\n");
+
+		readeeprom();
 		
 		break;
 		
 		case 2:
-		printf("Updating is\r\n");
+		printf("erase all data\r\n");
+		
 		break;
 		
 		case 3:
-		printf("erase all data\r\n");
-		break;
-		
-		case 4:
 		printf("Going back\r\n");
 		start_var = 255;
 		break;
 		
 		default:
 		printf("Start Menu > Data\r\n");
-		printf("1 = Read data from the fans");
-		printf("2 = Write data from the fans");
-		printf("3 = Erase all data");
-		printf("4 = Go Back->");
-		data_var = compareCommands(command,choicearray,4);
-	}
+		printf("1 = Read data from the fans\r\n");
+		printf("2 = Erase all data\r\n");
+		printf("3 = Go Back->\r\n");
+		data_var = compareCommands(command,choicearray,9);
+	}	if (compareCommands(command, choicearray, 9) == 9){
+		
+}
 }
 
 void automaticspeed(){
@@ -296,6 +312,62 @@ void automaticspeed(){
 	{
 		//skjekker termistor og setter hastigheten etter det
 		;
+	}
+}
+
+void readeeprom(){
+	switch (read_val)
+	{
+	case 1:
+	read_data_rpm_eeprom(current_fan_adress1,start_fan_adress1);
+	read_val=255;
+		break;
+	case 2 :
+	read_data_rpm_eeprom(current_fan_adress2,start_fan_adress2);
+	read_val=255;
+		break;
+	case 3:
+	read_data_rpm_eeprom(current_fan_adress3,start_fan_adress3);
+	read_val=255;
+		break;
+	case 4:
+	read_data_rpm_eeprom(current_fan_adress4,start_fan_adress4);
+	read_val=255;
+		break;
+	case 5:
+	read_data_rpm_eeprom(current_fan_adress5,start_fan_adress5);
+	read_val=255;
+		break;
+	case 6:
+	read_data_rpm_eeprom(current_fan_adress6,start_fan_adress6);
+	read_val=255;
+		break;
+	case 7:
+	read_data_rpm_eeprom(current_fan_adress7,start_fan_adress7);
+	read_val=255;
+		break;
+	case 8:
+	read_data_rpm_eeprom(current_fan_adress8,start_fan_adress8);
+	read_val=255;
+		break;
+	case 9:
+		printf("Going Back->\r\n");
+		start_var=255;
+		break;
+	default:
+	printf("1 = Fan 1\r\n");
+	printf("2 = Fan 2\r\n");
+	printf("3 = Fan 3\r\n");
+	printf("4 = Fan 4\r\n");
+	printf("5 = Fan 5\r\n");
+	printf("6 = Fan 6\r\n");
+	printf("7 = Fan 7\r\n");
+	printf("8 = Fan 8\r\n");
+	printf("9 = Go Back->\r\n");
+	read_val=compareCommands(command,choicearray,9);
+
+
+			
 	}
 }
 
