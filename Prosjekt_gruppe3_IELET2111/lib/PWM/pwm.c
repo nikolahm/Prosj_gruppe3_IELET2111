@@ -24,14 +24,6 @@ void speed_controll_6 (uint8_t persentage);
 void speed_controll_7 (uint8_t persentage);
 
 
-
-int main(void)
-{	
-	while (1)
-	{
-	}
-}
-
 void speed_controll_0 (uint8_t persentage)
 {
 	if (persentage > 100)
