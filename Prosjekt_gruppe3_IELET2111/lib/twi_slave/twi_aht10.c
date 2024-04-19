@@ -125,17 +125,3 @@ uint8_t read_aht10_data(uint8_t mesurments){
 		return ((((float)tdata* 200 / 0x100000) ) - 50);
 	}
 }
-
-int main ( void )
-{
-	twi_master_init_aht10();	
-	while (1)
-	{
-		printf("temperature: %d \n", read_aht10_data(0));
-		printf("humidity: %d \n", read_aht10_data(1));
-		printf("\n");
-		
-
-	}
-	return 0;
-}
