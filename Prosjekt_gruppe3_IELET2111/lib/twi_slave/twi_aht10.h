@@ -6,11 +6,11 @@
  */ 
 
 
-#ifndef TWI_SLAVE_H_
-#define TWI_SLAVE_H_
+#ifndef TWI_AHT10_H_
+#define TWI_AHT10_H_
 
 void twi_master_init_aht10(void);
-uint8_t read_ath10_data(uint8_t mesurments);
+uint8_t read_aht10_data(uint8_t mesurments);
 
 
-#endif /* TWI_SLAVE_H_ */
+#endif /* TWI_AHT10_H_ */
