@@ -94,18 +94,18 @@ void twi_master_init_aht10(){
 	USART3_init () ; // enable clock and data pin
 	TWI0_M_init () ; // Enable twi connection
 	_delay_ms(20);
-	printf ("---- Enabled connection with ath10-sensor ----\n");
-	I2C_M_write (0x38 ,0xE1); //Sending enable commando to ath10 sensor
+	printf ("---- Enabled connection with aht10-sensor ----\n");
+	I2C_M_write (0x38 ,0xE1); //Sending enable commando to aht10 sensor
 	_delay_ms(75); // Waiting for signal to transmitt
 	I2C_M_write (0x38 ,0xBA); // Soft starting and calibrating the sensor
 }
 /**
-* @brief Reads the data from ath10 sensor and returns the messurmens vlues
+* @brief Reads the data from aht10 sensor and returns the messurmens vlues
 * @param mesurments uses either a 1 or 0 to select humidity data or temperature data
 **/
-uint8_t read_ath10_data(uint8_t mesurments){
+uint8_t read_aht10_data(uint8_t mesurments){
 	uint8_t data[6];
-	I2C_M_write (0x38 ,0xAC); // Sends the measurement commando to ath10 sensor 
+	I2C_M_write (0x38 ,0xAC); // Sends the measurement commando to aht10 sensor 
 	_delay_ms (75); // Wait for the signal to transmit
 	I2C_M_read (0x38, data , 6) ; // Reasive the data, placing it in the data value
 
@@ -124,4 +124,18 @@ uint8_t read_ath10_data(uint8_t mesurments){
 		tdata |= data[5];
 		return ((((float)tdata* 200 / 0x100000) ) - 50);
 	}
+}
+
+int main ( void )
+{
+	twi_master_init_aht10();	
+	while (1)
+	{
+		printf("temperature: %d \n", read_aht10_data(0));
+		printf("humidity: %d \n", read_aht10_data(1));
+		printf("\n");
+		
+
+	}
+	return 0;
 }
