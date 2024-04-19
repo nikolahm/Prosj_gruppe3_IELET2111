@@ -22,7 +22,7 @@
 # include <stdio.h>
 #include <string.h>
 # include "usart.h"
-#include "twi_slave.h"
+#include "twi_aht10.h"
 
 static void TWI0_M_init ( void ) {
 	PORTA.DIRSET = PIN2_bm | PIN3_bm ;
