@@ -22,6 +22,8 @@
 # include <stdio.h>
 #include <string.h>
 # include "usart.h"
+#include "twi_aht10.h"
+
 static void TWI0_M_init ( void ) {
 	PORTA.DIRSET = PIN2_bm | PIN3_bm ;
 	PORTA.PINCONFIG = PORT_PULLUPEN_bm ;
@@ -54,7 +56,7 @@ static void I2C_M_write ( uint8_t addr , uint8_t data ) {
 	TWI_WAIT();
 	
 	/* Check for NACK */
-	if( TWI0 . MSTATUS & TWI_RXACK_bm ) {
+	if( TWI0.MSTATUS & TWI_RXACK_bm ) {
 		// target is full
 		printf (" target NACK \n");
 	}
@@ -92,58 +94,34 @@ void twi_master_init_aht10(){
 	USART3_init () ; // enable clock and data pin
 	TWI0_M_init () ; // Enable twi connection
 	_delay_ms(20);
-	printf (" Sample start \n");
-	I2C_M_write (0x38 ,0xE1);
-	_delay_ms(100);
-	I2C_M_write (0x38 ,0xBA);
+	printf ("---- Enabled connection with aht10-sensor ----\n");
+	I2C_M_write (0x38 ,0xE1); //Sending enable commando to aht10 sensor
+	_delay_ms(75); // Waiting for signal to transmitt
+	I2C_M_write (0x38 ,0xBA); // Soft starting and calibrating the sensor
 }
-int temperature_converter_aht10(){
-	uint16_t temperature;
-	uint32_t tdata = data[3] & 0x0F;
-	tdata <<=8;
-	tdata |= data[4];
-	tdata <<= 8;
-	tdata |= data[5];
-	temperature = ((((float)tdata* 200 / 0x100000) ) - 50);
-	return temperature;
-}
-int main ( void )
-{
-	twi_master_init_aht10();
+/**
+* @brief Reads the data from aht10 sensor and returns the messurmens vlues
+* @param mesurments uses either a 1 or 0 to select humidity data or temperature data
+**/
+uint8_t read_aht10_data(uint8_t mesurments){
 	uint8_t data[6];
-	uint8_t newData = 0;
-	
-	int16_t humidity;
-	int16_t temperature;
-	while (1)
-	{
-		I2C_M_write (0x38 ,0xAC);
-		_delay_ms (1000);
-		I2C_M_read (0x38, data , 6) ;
-/*		data [6] = '\0';*/
-		_delay_ms (1000) ;
-//  		for (int i=0; i<sizeof(data); i++) {
-//  			printf ("%d\n", data[i]);
-//  		_delay_ms(100);
-// 		}
-		printf("\n");
-	uint32_t h = data[1];
-	h <<= 8;
-	h |= data[2];
-	h <<= 4;
-	h |= data[3] >> 4;
-	humidity = ((float)h*100)/0x100000;
-	printf("Humidity: %d \n", humidity);
+	I2C_M_write (0x38 ,0xAC); // Sends the measurement commando to aht10 sensor 
+	_delay_ms (75); // Wait for the signal to transmit
+	I2C_M_read (0x38, data , 6) ; // Reasive the data, placing it in the data value
 
-	uint32_t tdata = data[3] & 0x0F;
-	tdata <<=8;
-	tdata |= data[4];
-	tdata <<= 8;
-	tdata |= data[5];
-	temperature = ((((float)tdata* 200 / 0x100000) ) - 50);
-	printf(" Temperature: %d \n", temperature);
+	if (mesurments == 1){ // If 1 return humidity measurements
+		uint32_t h = data[1]; // Place all the humidity data to data. 
+		h <<= 8;
+		h |= data[2];
+		h <<= 4;
+		h |= data[3] >> 4;
+		return ((float)h*100)/0x100000;
+	}else{ // else returns temperature measurement
+		uint32_t tdata = data[3] & 0x0F; // place all temperature data to data
+		tdata <<=8;
+		tdata |= data[4];
+		tdata <<= 8;
+		tdata |= data[5];
+		return ((((float)tdata* 200 / 0x100000) ) - 50);
 	}
-	return 0;
 }
-//data [7] = ’\0 ’;
-
