@@ -79,9 +79,10 @@ ISR(TCB0_INT_vect)
 	signal_pulse = TCB0.CCMP/4;
 	signal_period = TCB0.CNT/4;
 	frequency = F_CPU/signal_period;
-	RPM =  (60.0/(2.0*0.00001*((float)signal_pulse/8)));
+	RPM =  (60.0/(2.0*0.00001*((float)signal_pulse/5)));
 	dutycycle = 16.906006771355486 + 0.007366553738916978*RPM - 5.115980980300793 * pow(10, -7) * pow(RPM, 2) + 3.762891047688633 * pow(10, -11) * pow(RPM, 3) + 2.4564312000230716 * pow(10, -15) * pow(RPM, 4) - 1.2864319433167294 * pow(10, -19) * pow(RPM, 5) - 6.676372918605685 * pow(10, -24) * pow(RPM, 6);
 	TCB0.INTFLAGS = TCB_CAPT_bm;		// Reset interrupt flag
+	sei();
 }
 
 void TCB0_init(void){
