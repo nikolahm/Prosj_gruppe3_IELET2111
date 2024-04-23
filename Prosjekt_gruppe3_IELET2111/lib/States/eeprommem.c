@@ -16,7 +16,7 @@
 #include "uart.h"
 #include "switchstates1.h"
 #include "eeprommem.h"
-#include "PWM.h"
+#include "pwm.h"
 
 
 void eeprom_check_ready(){
