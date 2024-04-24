@@ -1,4 +1,5 @@
-/* twi_aht10.h
+/*
+ * twi_aht10.h
  *
  * Created: 22.04.2024 11:34:42
  *  Author: Meg
