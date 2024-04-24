@@ -73,19 +73,34 @@ void eeprom_current_adress_boot(volatile uint16_t *current_adress,volatile uint1
 
 
 void average_rpm(int *current_rpm,volatile uint16_t *current_address,volatile uint16_t *store_rpm,volatile uint16_t *n_count_address,const uint16_t *start_address) {
-	if (write_eeprom_flag) {
-		int RPM_INPUT1 = 202.8211853894 ;
+	if (1) {
+		fanspeed_val= automaticspeed();
 		
-		(*current_rpm) = RPM ;// Example value
+		uint16_t RPM_output1 = RPM_value(RPM);
+		uint16_t RPM_INPUT1 = 202.82118538941248 - 98.6784062283774*(fanspeed_val) + 6.214541290707817 * pow((fanspeed_val), 2) + 0.00901579323430356 * pow((fanspeed_val), 3) + -0.0018046531131196354 * pow((fanspeed_val), 4) + 0.00001879112425079804 * pow((fanspeed_val), 5) -5.581980709961264 *pow(10, -8) * pow((fanspeed_val), 6);
+		
+// 				printf("fanspeedvalue\r\n");
+// 				printf("%d\n",RPM_INPUT1);
+// 				printf("tacometer\r\n");
+// 				printf("%d\n\n",RPM_output1);
+				
+		//(*current_rpm)
+		uint16_t pred_var= (((float)(RPM_INPUT1-RPM_output1))/((float)(RPM_INPUT1)))*100;
+// 		
+// 		printf("difference: ");
+// 		printf("%d\n",pred_var);
 		i++;
-		(*store_rpm) += (*current_rpm);
-		
+		(store_rpm1) += pred_var;
+		uint16_t printvar=(store_rpm1);
+// 		printf("%d\n",printvar);
+// 		
 		// Check if current address exceeds maximum address
 		if ((*current_address) >= ((*start_address) + 29)) {
 			(*current_address) = (*start_address) + 1; // Reset current address
 		}
-		printf("%d",i);
-		if (i > 1000) {
+// 		printf("count: ");
+// 		printf("%d\n",i);
+		if (i > 100) {
 			eeprom_check_ready(); // Check if EEPROM is ready
 			
 			int average_rpm_val = (*store_rpm) / i; // Calculate average of RPM
@@ -104,7 +119,7 @@ void average_rpm(int *current_rpm,volatile uint16_t *current_address,volatile ui
 
 
 
-write_struct2_eeprom(int write_structrpm,int current_adress){ //takes in struct and address of the unique fans
+void write_struct2_eeprom(int write_structrpm,int current_adress){ //takes in struct and address of the unique fans
 	uint8_t struct_size = sizeof(write_structrpm);  // size of the struct
 	
 	eeprom_check_ready(); // check if ready to write
