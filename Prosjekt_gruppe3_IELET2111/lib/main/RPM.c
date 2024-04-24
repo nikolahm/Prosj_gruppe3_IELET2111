@@ -5,7 +5,7 @@
  *  Author: Meg
  */ 
 #define F_CPU 4000000UL
-#define USART3_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
+//#define USART3_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 
 #include <avr/io.h>
@@ -15,10 +15,9 @@
 #include <string.h>
 #include "RPM.h"
 //volatile int pulseCount = 0;
-volatile long signal_pulse;
-volatile long signal_period;
+
 int frequency;
-uint16_t RPM;
+//uint16_t RPM;
 float dutycycle;
 
 void TCB0_init(void);
@@ -31,7 +30,7 @@ void initialize_rpm(){
 		PORTB.DIR &= ~PIN5_bm;
 		PORTB.PIN5CTRL |= PORT_PULLUPEN_bm;
 		}
-int RPMstuff(void)
+/*int RPMstuff(void)
 {
 		if (!(TCB0.INTFLAGS))
 		{
@@ -62,7 +61,7 @@ int RPMstuff(void)
 			USART3_sendString(dutyStr);
 		
 	}
-}
+}*/
 
 // Interrupt Service Routine for capturing rising edges on tachometer pin
 
@@ -103,8 +102,13 @@ void EVSYS_init(void){
 	//Bind user TCB0CAPT to event system channel 2
 	EVSYS.USERTCB0CAPT = EVSYS_USER_CHANNEL0_gc;
 }
-int RPM_value(){
-	frequency = F_CPU/signal_period;
-	RPM =  (60.0/(2.0*0.00001*((float)signal_pulse/5)));
+
+int RPM_value(uint16_t var){
+	
+	uint16_t RPM =  var;
+	
+	
+	return  RPM;
 	
 }
+
