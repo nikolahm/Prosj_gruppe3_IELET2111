@@ -17,6 +17,10 @@
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 #include "uart.h"
+#include "eeprommem.h"
+#include "RPM.h"
+
+
 
 void USART3_init ( void )
 {
@@ -33,7 +37,8 @@ void USART3_sendChar ( char c){
 		;
 	}
 	USART3.TXDATAL = c;
-}
+	
+	}
 // Wrapping USART3_sendChar in a function computable with FDEV_SETUP_STREAM
 int USART3_printChar ( char c, FILE * stream )
 {
@@ -53,12 +58,14 @@ uint8_t USART3_read ()
 {
 	while (!( USART3.STATUS & USART_RXCIF_bm ))
 	{
+		
 		;
 	}
 	uint8_t src = USART3.RXDATAL ;
 	USART3_sendChar ( src );
 	return src ;
-}
+	
+	}
 
 uint8_t compareCommands(char* src, char* arrays[], uint8_t array_size) {
 	// Return index of command received or 255 if none
