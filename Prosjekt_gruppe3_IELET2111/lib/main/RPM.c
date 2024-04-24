@@ -14,7 +14,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "RPM.h"
-//volatile int pulseCount = 0;
+
+
 volatile long signal_pulse;
 volatile long signal_period;
 int frequency;
@@ -98,7 +99,7 @@ void TCB0_init(void){
 void EVSYS_init(void){
 	
 	//Set pin PD2 to channel 2 in the event system
-	EVSYS.CHANNEL0 = EVSYS_CHANNEL0_PORTB_PIN5_gc;				// 0x4A equals to PD2
+	EVSYS.CHANNEL0 = EVSYS_CHANNEL0_PORTB_PIN5_gc;
 	
 	//Bind user TCB0CAPT to event system channel 2
 	EVSYS.USERTCB0CAPT = EVSYS_USER_CHANNEL0_gc;
