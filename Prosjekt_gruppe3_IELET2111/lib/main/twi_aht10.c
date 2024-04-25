@@ -70,7 +70,7 @@ static void I2C_M_write ( uint8_t addr , uint8_t data ) {
 * @param data Pointer to data array .
 * @param len The number of bytes to be read .
 */
-static void I2C_M_read ( uint8_t addr , uint8_t * data , uint8_t len ) {
+static void I2C_M_read ( uint8_t addr , uint8_t *data , uint8_t len ) {
 	I2C0_M_start ( addr , DIR_READ );
 	uint8_t byte_count = 0;
 	while ( byte_count < len ) {
@@ -124,6 +124,7 @@ uint8_t read_aht10_data(uint8_t mesurments){
 		tdata <<= 8;
 		tdata |= data[5];
 		return ((((float)tdata* 200 / 0x100000) ) - 50);
+		
 		
 	}
 }

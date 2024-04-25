@@ -16,14 +16,14 @@
 #include <string.h>
 
 //volatile int pulseCount = 0;
-volatile long signal_pulse;
-volatile long signal_period;
+
 int frequency;
 uint16_t RPM;
 float dutycycle;
 void TCB0_init(void);
 void EVSYS_init();
 int RPMstuff(void);
+int RPM_value(uint16_t var);
 
 
 

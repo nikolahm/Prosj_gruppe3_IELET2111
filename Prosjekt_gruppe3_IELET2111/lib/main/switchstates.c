@@ -43,7 +43,7 @@ bool set_speed_flag = false;
 */
 
 void startMenu(){
-	RPM_value();
+	
 	//automaticspeed();
 	
 			
@@ -206,6 +206,7 @@ void percentageVifte() {
 	if (compareCommands(command, choicearray, 5) == 1) {
 		manual_var = 255;
 	}
+	
 }
 
 
@@ -219,7 +220,7 @@ void fan_choice(){
 		printf("Choose your next percentage:\r\n");
 		printf(percentage_val);
 		speed_controll_0(fanspeed_val);
-		fanspeed_val1=fanspeed_val;
+		fanspeed_val1 = fanspeed_val;
 		printf(fanspeed_val);
 		fan_var=255;
 		set_speed_flag = false;
@@ -339,9 +340,9 @@ void dataMenu(){
 }
 }
 
-void automaticspeed(){
-	 uint8_t setspeed= 0;
-	 
+int automaticspeed(){
+	
+	uint8_t setspeed =0;
    if (auto_flag) {
 	  
 	   setspeed = (read_aht10_data(0)) * 8 - 150; // Linear interpolation to calculate speed
@@ -351,10 +352,11 @@ void automaticspeed(){
 		  speed_controll_0(setspeed);
 	   }
 	     
-		printf("%d\r\n",setspeed);
-	  speed_controll_0(setspeed);
+		
+		speed_controll_0(setspeed);
+	  
    }
-   
+   return setspeed;
    
    }
 

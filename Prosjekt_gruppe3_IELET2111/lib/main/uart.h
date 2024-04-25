@@ -7,7 +7,6 @@
 
 
 #ifndef UART_H_
-#define F_CPU 4000000UL
 #define UART_H_
 #define USART3_BAUD_RATE(BAUD_RATE) ((float)(F_CPU*64 / (16*(float)BAUD_RATE )) + 0.5)
 #define MAX_COMMAND_LEN 10

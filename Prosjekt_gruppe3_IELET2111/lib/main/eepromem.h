@@ -59,6 +59,6 @@ extern uint32_t store_rpm8;
 
 
 uint8_t fanspeed1;
-static bool write_eeprom_flag= false;
+static bool write_eeprom_flag= true;
 
 #endif /* EEPROMMEM_H_ */

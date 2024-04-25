@@ -10,8 +10,10 @@
 #define SWITCHSTATES1_H_
 void fan_choice();
 
+
+
 //prototypes for the switch case
-void automaticspeed();
+int automaticspeed();
 void percentageVifte();
 void startMenu();
 void modesMenu();
