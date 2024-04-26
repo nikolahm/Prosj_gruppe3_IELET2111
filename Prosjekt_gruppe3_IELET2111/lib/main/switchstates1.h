@@ -1,3 +1,4 @@
+
 /*
  * switchstates1.h
  *
@@ -8,6 +9,10 @@
 
 #ifndef SWITCHSTATES1_H_
 #define SWITCHSTATES1_H_
+
+
+
+
 void fan_choice();
 
 
@@ -27,6 +32,8 @@ uint8_t data_var;
 uint8_t fanspeed_val;
 uint8_t fanspeed_val1;
 uint8_t read_val;
+uint8_t automaticspeed_limiter;
+static bool data_read = false;
 
  //could set as exter
 
