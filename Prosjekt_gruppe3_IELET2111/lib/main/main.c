@@ -16,7 +16,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "uart.h"
-#include "switchstates1.h"
+#include "switchstates.h"
 #include "eeprommem.h"
 #include "PWM.h"
 #include "RPM.h"
@@ -50,19 +50,25 @@ int main ( void )
 	_delay_ms (10) ;
 	twi_master_init_aht10();
 	_delay_ms (1000);
-	
+	initialize_adresses();
+	automaticspeed_limiter=0;
 	 //adress_space_clear(); if adresses are to be cleared manualy
 	
 	// FUSE.SYSCFG0 |=(0<<1); // eeprom is saved under chip erase, optional
 	
 	while (1)
-	{	
-		//cli();
-		//_delay_ms(10);
-		
+	{
+		//	_delay_ms(100);
+		cli();
+		automaticspeed_limiter++;
+		if(automaticspeed_limiter>10){
 		automaticspeed();//needs to be updated always
-
-average_rpm(RPM,&current_fan_adress1,&store_rpm1,&n_count_adress1,&start_fan_adress1);
+		sei();
+		cli();
+		automaticspeed_limiter=0;
+		average_rpm(RPM,&current_fan_adress1,&store_rpm1,&n_count_adress1,start_fan_adress1);
+		}
+	
 // 		
 // 		printf("int: ");
 // 		
@@ -93,7 +99,7 @@ average_rpm(RPM,&current_fan_adress1,&store_rpm1,&n_count_adress1,&start_fan_adr
 		
 			}
 		}
-		//sei();
+		sei();
 	}
 	
 	
@@ -114,31 +120,9 @@ ISR(TCB0_INT_vect)
 	
 }
 
-int RPMstuff(void)
-{
-	if (!(TCB0.INTFLAGS))
-	{
-		
-		char pulseStr[10];
-		sprintf(pulseStr, "%d\r\n", signal_pulse);
-		USART3_sendString("\n\nSignal pulse [us]: ");
-		USART3_sendString(pulseStr);
-		
-		char periodStr[10];
-		sprintf(periodStr, "%d\r\n", signal_period);
-		USART3_sendString("\nSignal period [us]: ");
-		USART3_sendString(periodStr);
-
-
-		
-	}
-}
 
 ISR (USART3_RXC_vect){
-	recived = USART3_read(); //variable containing information about the message
+	recived = USART3_read();  //variable containing information about the message
 	USART3.STATUS |= USART_RXCIF_bm; //usart status set to clear, so information can be recived next interupt
 	data_ready_flag = 1; //set flag to recived information on usart
 }
-
-
-
