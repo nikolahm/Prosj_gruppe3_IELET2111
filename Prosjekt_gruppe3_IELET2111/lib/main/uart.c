@@ -69,12 +69,12 @@ uint8_t USART3_read ()
 
 uint8_t compareCommands(char* src, char* arrays[], uint8_t array_size) {
 	// Return index of command received or 255 if none
-	for (uint8_t i = 0; i < array_size; i++) {
+	for (uint8_t a = 0; a < array_size; a++) {
 		
-		if (!strncmp(src, arrays[i], array_size)) {
+		if (!strncmp(src, arrays[a], array_size)) {
 			
 			
-			return i+1 ;
+			return a+1 ;
 			
 		}
 	}
