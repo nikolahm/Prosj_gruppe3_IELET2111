@@ -15,7 +15,7 @@
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 #include "uart.h"
-#include "switchstates1.h"
+#include "switchstates.h"
 #include "eeprommem.h"
 #include "PWM.h"
 #include "RPM.h"
@@ -108,48 +108,35 @@ void modesMenu(){
 		printf("3 = Additional\r\n");
 		printf("4 = Go Back\r\n");
 		modes_var = compareCommands(command,choicearray,5);
+		manual_var=255;
+		fan_var=255;
+		
 		break;
 	}
 }
 void manualMenu(){
 	switch (manual_var)
 	{
-		case 1:
-		printf("Slow speed activated\r\n");
-		auto_flag = false;
-		speed= 30;
-		manual_var=255;
-		break;
-		case 2:
-		printf("Medium speed activated\r\n");
-		auto_flag = false;
-		speed=60;
-		manual_var=255;
-		break;
-		case 3:
-		printf("Fast speed activated\r\n");
-		auto_flag = false;
-		speed=90;
-		manual_var=255;
-		break;
 		
-		case 4:
+		
+		case 1:
+		
 		auto_flag = false;
-		if (set_speed_flag == true)
+		if (set_speed_flag)
 		{
 			fan_choice();
 			
 		}else{ percentageVifte();
 			printf("Enter Percentage\r\n");
-			printf("1 = Go Back\r\n");
+			
 		}
-		
-		
+			
 		break;
 		
-		case 5:
+		case 2:
 		printf("Going back->\r\n");
 		modes_var=255;
+		manual_var=255;
 		break;
 		
 		default:
@@ -158,16 +145,13 @@ void manualMenu(){
 		}
 		manual_var = compareCommands(command,choicearray,5);
 		printf("Start Menu > Modes > Manual speed\r\n");
-		printf("1 = Slow\r\n");
-		printf("2 = Medium\r\n");
-		printf("3 = Fast\r\n");
-		printf("4 = Percentage\r\n");
-		printf("5 = Go Back\r\n");
+		printf("1 = Percentage\r\n");
+		printf("2 = Go Back\r\n");
 		
 		
 		
 		
-		break;
+	
 	}
 }
 
@@ -193,7 +177,7 @@ void percentageVifte() {
 			printf("Percentage value: %d\n", percentage_val);
 			fanspeed_val = percentage_val;
 			
-			fanspeed_val1=fanspeed_val;
+			fanspeed_val1 = percentage_val;
 			
 			printf(percentage_val);
 			
@@ -203,9 +187,6 @@ void percentageVifte() {
 			printf("Error: Value out of range, please select within the range of 0-100\n");
 		}
 	}
-	if (compareCommands(command, choicearray, 5) == 1) {
-		manual_var = 255;
-	}
 	
 }
 
@@ -214,13 +195,12 @@ void fan_choice(){
 	switch(fan_var)
 	{
 		case 1:
-		fanspeed1 = fanspeed_val;
-		printf("Fan 1 set to :%d\r\n",fanspeed_val); 
+		
+		printf("Fan 1 set to :%d\r\n",percentage_val); 
 		printf("\r\n");
 		printf("Choose your next percentage:\r\n");
-		printf(percentage_val);
-		speed_controll_0(fanspeed_val);
-		fanspeed_val1 = fanspeed_val;
+		speed_controll_0(percentage_val);
+		
 		printf(fanspeed_val);
 		fan_var=255;
 		set_speed_flag = false;
@@ -357,7 +337,7 @@ int automaticspeed(){
 	  
    }
    return setspeed;
-   
+
    }
 
 
