@@ -1,14 +1,13 @@
 /*
  * PWM.h
  *
- * Created: 15.04.2024 15:31:23
+ * Created: 25.04.2024 14:12:22
  *  Author: Meg
  */ 
 
 
 #ifndef PWM_H_
 #define PWM_H_
-
 
 
 void TCA0_init(void);
@@ -24,7 +23,4 @@ void speed_controll_6 (uint8_t persentage);
 void speed_controll_7 (uint8_t persentage);
 
 
-
-
-
-#endif /* PWM_H_ 
+#endif /* PWM_H_ */
