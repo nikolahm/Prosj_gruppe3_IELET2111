@@ -88,8 +88,8 @@ static void I2C_M_read ( uint8_t addr , uint8_t * data , uint8_t len ) {
 * @brief this function does the nesesary initialization for enabling the aht10 sensor
 **/
 void twi_master_init_aht10(){
-	PORTB.DIRSET |= PIN1_bm; // enables power pin for sensor
-	PORTB.OUT |= PIN1_bm;
+	PORTB.DIRSET |= PIN3_bm; // enables power pin for sensor
+	PORTB.OUT |= PIN3_bm;
 	
 	USART3_init () ; // enable clock and data pin
 	TWI0_M_init () ; // Enable twi connection
