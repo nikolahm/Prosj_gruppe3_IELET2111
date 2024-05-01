@@ -189,7 +189,7 @@ void TCA0_init(void)
 void TCA1_init(void)
 {
 	/* set waveform output on PORT D*/
-	PORTMUX.TCAROUTEA = PORTMUX_TCA1_PORTB_gc;
+	PORTMUX.TCAROUTEA = PORTMUX_TCA1_PORTG_gc;
 
 	TCA1.SINGLE.CTRLB = TCA_SINGLE_CMP0EN_bm | TCA_SINGLE_CMP1EN_bm |TCA_SINGLE_CMP2EN_bm /* enable compare
 	channel 0 */
@@ -218,8 +218,8 @@ void PORT_init(void)
 	PORTD.DIRSET |= PIN4_bm;
 	PORTD.DIRSET |= PIN5_bm;
 	
-	PORTB.DIRSET |= PIN0_bm;
-	PORTB.DIRSET |= PIN1_bm;
+	PORTG.DIRSET |= PIN0_bm;
+	PORTG.DIRSET |= PIN1_bm;
 }
 
 
