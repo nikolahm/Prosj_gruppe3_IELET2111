@@ -44,9 +44,9 @@ extern volatile uint16_t n_count_adress7;
 extern volatile uint16_t n_count_adress8;
 //}ncntstrct
  static volatile uint16_t i = 0;
-// storing avrage information on fans
 //typedef struct store_rpm_struct 
 //{
+// storing avrage information on fans
 extern uint32_t store_rpm1;
 extern uint32_t store_rpm2;
 extern uint32_t store_rpm3;
@@ -56,12 +56,11 @@ extern uint32_t store_rpm6;
 extern uint32_t store_rpm7;
 extern uint32_t store_rpm8;
 
-// only write once
-
+//prototype
 void average_rpm(int *current_rpm,volatile uint16_t *current_address,volatile uint16_t *store_rpm,volatile uint16_t *n_count_address,const uint16_t *start_address);
 
 uint8_t fanspeed1;
-static bool write_eeprom_flag= true;
+static bool write_eeprom_flag= true; //debugging variable
 
 #endif /* EEPROMMEM_H_ */
  /* EEPROMMEM_H_ */
