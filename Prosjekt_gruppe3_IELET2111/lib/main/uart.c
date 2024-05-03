@@ -67,16 +67,16 @@ uint8_t USART3_read ()
 	
 	}
 
-uint8_t compareCommands(char* src, char* arrays[], uint8_t array_size) {
+uint8_t compareCommands(char* src, char* arrays[], uint8_t array_size) {//compares usart command to command array
 	// Return index of command received or 255 if none
-	for (uint8_t a = 0; a < array_size; a++) {
+	for (uint8_t a = 0; a < array_size; a++) { //checks for lenght of array
 		
-		if (!strncmp(src, arrays[a], array_size)) {
+		if (!strncmp(src, arrays[a], array_size)) { //if command is not equal to current char in array
 			
 			
 			return a+1 ;
 			
 		}
 	}
-	return 255;
+	return 255; //return command not in array
 }
