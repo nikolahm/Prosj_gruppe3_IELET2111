@@ -10,19 +10,14 @@
 #ifndef SWITCHSTATES1_H_
 #define SWITCHSTATES1_H_
 
-
-
-
-void fan_choice();
-
-
-
 //prototypes for the switch case
 int automaticspeed();
 void percentageVifte();
 void startMenu();
 void modesMenu();
 void manualMenu();
+void fan_choice();
+
 //variables for the switch cases
 uint8_t start_var;
 uint8_t modes_var;
@@ -35,9 +30,7 @@ uint8_t read_val;
 uint8_t automaticspeed_limiter;
 static bool data_read = false;
 
- //could set as exter
 
-  //boll for keeping track of one command-each time speed is set
 
 int percentage_val;  //percentage speed for the fans
 
