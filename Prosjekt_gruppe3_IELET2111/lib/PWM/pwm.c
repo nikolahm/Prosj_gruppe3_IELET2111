@@ -23,25 +23,39 @@ void speed_controll_5(uint8_t persentage);
 void speed_controll_6 (uint8_t persentage);
 void speed_controll_7 (uint8_t persentage);
 
-
+/**
+ * @brief Control PWM duty cycle for channel 0.
+ * 
+ * @param persentage Percentage of duty cycle (0-100).
+ * @return void
+ */
 void speed_controll_0 (uint8_t persentage)
 {
+	 /* Check if percentage is greater than 100% */
 	if (persentage > 100)
 	{
+		/* Set maximum duty cycle */
 		TCA0.SPLIT.LCMP0 = PERIOD_VALUE;
-	} else if (persentage < 20)
+	} else if (persentage < 20) // Check if percentage is less than 20%
 	{
+		/* Set duty cycle to 20%, fan can't spin for  */
 		TCA0.SPLIT.LCMP0 = (uint8_t)((PERIOD_VALUE * 20 / 100));
+		/* Stopp fan compleatly if persentage = 0*/
 		if (persentage == 0){
 			TCA0.SPLIT.LCMP0 = (uint8_t)((PERIOD_VALUE * 1 / 100));
 		}
 	} 
 	else
 	{
+		/* Calculate duty cycle based on percentage */
 		uint8_t speed_value = (uint8_t)((PERIOD_VALUE * persentage / 100));
+	     	/* Set duty cycle */
 		TCA0.SPLIT.LCMP0 = speed_value;
 	}
 }
+
+/* Functions speed_controll_1 to speed_controll_7 follow the same pattern as speed_controll_0 */
+
 void speed_controll_1 (uint8_t persentage)
 {
 	if (persentage > 100)
@@ -168,56 +182,64 @@ void speed_controll_7 (uint8_t persentage)
 		TCA1.SINGLE.CMP1BUF = speed_value;
 	}
 }
+
+/**
+ * @brief Initialize Timer/Counter module TCA0 for PWM.
+ */
 void TCA0_init(void)
 {
 	
 	/* set waveform output on PORT D*/
 	PORTMUX.TCAROUTEA = PORTMUX_TCA0_PORTD_gc;
+	/* Enable split mode */
 	TCA0.SPLIT.CTRLD = 1 << 0;
-	TCA0.SPLIT.CTRLB = 0xff; /* enable compare
-	channel 0 *	mode */
+	/* Enable all compare channel modes */
+	TCA0.SPLIT.CTRLB = 0xff;
 	
-	/* set PWM frequency and duty cycle (50%) */
+	/* Set PWM frequency and duty cycle */
 	TCA0.SPLIT.LPER = PERIOD_VALUE;
 	TCA0.SPLIT.HPER = PERIOD_VALUE;
 	
 
-	TCA0.SPLIT.CTRLA |= TCA_SPLIT_CLKSEL_DIV2_gc /* set clock source
-	(sys_clk/4) */
+	TCA0.SPLIT.CTRLA |= TCA_SPLIT_CLKSEL_DIV2_gc /* set clock source (sys_clk/2) */
 	| TCA_SPLIT_ENABLE_bm; /* start timer */
 }
+/**
+ * @brief Initialize Timer/Counter module TCA1 for PWM.
+ */
 void TCA1_init(void)
 {
-	/* set waveform output on PORT D*/
+	/* Set waveform output on PORT G */	
 	PORTMUX.TCAROUTEA = PORTMUX_TCA1_PORTG_gc;
 
-	TCA1.SINGLE.CTRLB = TCA_SINGLE_CMP0EN_bm | TCA_SINGLE_CMP1EN_bm |TCA_SINGLE_CMP2EN_bm /* enable compare
-	channel 0 */
-	| TCA_SINGLE_WGMODE_SINGLESLOPE_gc; /* set dual-slope PWM
-	mode */
+	/* enable compare channel 0, 1, and 2 */
+	TCA1.SINGLE.CTRLB = TCA_SINGLE_CMP0EN_bm | TCA_SINGLE_CMP1EN_bm |TCA_SINGLE_CMP2EN_bm 
+	| TCA_SINGLE_WGMODE_SINGLESLOPE_gc; /* set single-slope PWM mode */
 
 	/* disable event counting */
 	TCA1.SINGLE.EVCTRL &= 0;
 
-	/* set PWM frequency and duty cycle (50%) */
+	 /* Set PWM frequency and duty cycle */
 	TCA1.SINGLE.PER = PERIOD_VALUE;
 	
-
-	TCA1.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_DIV2_gc /* set clock source
-	(sys_clk/4) */
-	| TCA_SINGLE_ENABLE_bm; /* start timer */
+	/* Set clock source and start timer */
+	TCA1.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_DIV2_gc | TCA_SINGLE_ENABLE_bm;
 	
 }
+/**
+ * @brief Initialize PORT D and PORT G for PWM output.
+ */
 void PORT_init(void)
 {
-	/* set pin 0 of PORT D as output */
+    	/* Set pin 0 to 5 of PORT D as output */
 	PORTD.DIRSET |= PIN0_bm;
 	PORTD.DIRSET |= PIN1_bm;
 	PORTD.DIRSET |= PIN2_bm;
 	PORTD.DIRSET |= PIN3_bm;
 	PORTD.DIRSET |= PIN4_bm;
 	PORTD.DIRSET |= PIN5_bm;
-	
+
+  	/* Set pin 0 and 1 of PORT G as output */
 	PORTG.DIRSET |= PIN0_bm;
 	PORTG.DIRSET |= PIN1_bm;
 }
