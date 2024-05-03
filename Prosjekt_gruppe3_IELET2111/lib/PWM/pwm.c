@@ -6,11 +6,14 @@
  */ 
 
 
-#define PERIOD_VALUE (0x50)
-#define F_CPU 4000000
+#define PERIOD_VALUE (0x4F) 	// Define period value for PWM 
+#define F_CPU 4000000 		// Define CPU frequency 
+
+/* Include necessary AVR header files */
 #include <avr/io.h>
 #include <util/delay.h>
-/*Using default clock 3.33MHz */
+
+/* Defining all the functions used in the program */
 void TCA0_init(void);
 void TCA1_init(void);
 void PORT_init(void);
