@@ -4,6 +4,7 @@
  * Created: 11.04.2024 15:32:08
  *  Author: Meg
  */ 
+//this code is partially from LF in mikrokontrollersystemer, it has been edited to adapt the project
 
 // Init function
 #define F_CPU 4000000UL
