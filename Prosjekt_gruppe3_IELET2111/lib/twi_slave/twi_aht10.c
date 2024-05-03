@@ -1,3 +1,9 @@
+/*
+* "This code has drawn inspiration from the solution proposal for AVR exercise 7. 
+* The functions twi_master_init_aht10 and read_aht10_data are implemented for this program.
+* The rest of the code is for basic TWI communication with a slave.
+*/
+
 # define F_CPU 4000000UL
 
 // Formula for calculating baud rate . See chapter 29.3.2.2.1 , equation 2 in the datasheet .
@@ -28,7 +34,7 @@ static void TWI0_M_init ( void ) {
 	PORTA.DIRSET = PIN2_bm | PIN3_bm ;
 	PORTA.PINCONFIG = PORT_PULLUPEN_bm ;
 	PORTA.PINCTRLUPD = PIN2_bm | PIN3_bm ;
-	// TWI0 . CTRLA = TWI_SDAHOLD_50NS_gc ; // Setting hold time to 50 NS.
+	// TWI0.CTRLA = TWI_SDAHOLD_50NS_gc ; // Setting hold time to 50 NS.
 	
 	TWI0.MCTRLA = TWI_ENABLE_bm ; // Enable TWI /I2C as controller .
 	TWI0.MBAUD = ( uint8_t ) TWI0_BAUD ( I2C_SCL_FREQ ,0) ; // Configure TWI baud rate .
@@ -50,9 +56,9 @@ TWI_WAIT() ;
 * @param data The byte to be written .
 */
 static void I2C_M_write ( uint8_t addr , uint8_t data ) {
-	I2C0_M_start ( addr , DIR_WRITE );
-	_delay_ms(75);
-	TWI0.MDATA = data ;
+	I2C0_M_start ( addr , DIR_WRITE ); // Enable commenication with the target slave
+	_delay_ms(75); // Wait for pakket to recive
+	TWI0.MDATA = data ; // Sends data to slave
 	TWI_WAIT();
 	
 	/* Check for NACK */
@@ -61,7 +67,7 @@ static void I2C_M_write ( uint8_t addr , uint8_t data ) {
 		printf (" target NACK \n");
 	}
 	/* Issue a stop condition */
-	TWI0 . MCTRLB |= TWI_MCMD_STOP_gc ;
+	TWI0.MCTRLB |= TWI_MCMD_STOP_gc ;
 }
 /**
 * @brief This function reads len bytes to the device on the specified address .
@@ -69,7 +75,7 @@ static void I2C_M_write ( uint8_t addr , uint8_t data ) {
 * @param data Pointer to data array .
 * @param len The number of bytes to be read .
 */
-static void I2C_M_read ( uint8_t addr , uint8_t * data , uint8_t len ) {
+static void I2C_M_read ( uint8_t addr , uint8_t* data , uint8_t len ) {
 	I2C0_M_start ( addr , DIR_READ );
 	uint8_t byte_count = 0;
 	while ( byte_count < len ) {
@@ -91,7 +97,7 @@ void twi_master_init_aht10(){
 	PORTB.DIRSET |= PIN3_bm; // enables power pin for sensor
 	PORTB.OUT |= PIN3_bm;
 	
-	USART3_init () ; // enable clock and data pin
+	USART3_init () ; // Enables serial communication
 	TWI0_M_init () ; // Enable twi connection
 	_delay_ms(20);
 	printf ("---- Enabled connection with aht10-sensor ----\n");
@@ -100,7 +106,7 @@ void twi_master_init_aht10(){
 	I2C_M_write (0x38 ,0xBA); // Soft starting and calibrating the sensor
 }
 /**
-* @brief Reads the data from aht10 sensor and returns the messurmens vlues
+* @brief Reads the data from aht10 sensor and returns the messurmens values
 * @param mesurments uses either a 1 or 0 to select humidity data or temperature data
 **/
 uint8_t read_aht10_data(uint8_t mesurments){
@@ -115,13 +121,13 @@ uint8_t read_aht10_data(uint8_t mesurments){
 		h |= data[2];
 		h <<= 4;
 		h |= data[3] >> 4;
-		return ((float)h*100)/0x100000;
+		return ((float)h*100)/0x100000; // Returns formated humidety value in persentage humidity
 	}else{ // else returns temperature measurement
 		uint32_t tdata = data[3] & 0x0F; // place all temperature data to data
 		tdata <<=8;
 		tdata |= data[4];
 		tdata <<= 8;
 		tdata |= data[5];
-		return ((((float)tdata* 200 / 0x100000) ) - 50);
+		return ((((float)tdata* 200 / 0x100000) ) - 50); // Retrurn formated temperature in celsius 
 	}
 }
