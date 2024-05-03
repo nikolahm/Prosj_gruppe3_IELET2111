@@ -3,6 +3,7 @@
 *
 * Created : 03.03.2023 10:47:14
 * Author : crfosse
+* This code has drawn inspiration from the solution proposal for AVR exercise 7. 
 */
 # define F_CPU 4000000UL
 # include <avr/io.h>
