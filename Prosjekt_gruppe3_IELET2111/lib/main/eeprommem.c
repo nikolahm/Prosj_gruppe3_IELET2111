@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <avr/interrupt.h>
-#include <avr/eeprom.h>
+#include <avr/eeprom.h> //library from https://onlinedocs.microchip.com/pr/GUID-317042D4-BCCE-4065-BB05-AC4312DBC2C4-en-US-2/index.html?GUID-735C4A48-0970-4086-A5CA-89AC469956ED
 #include "uart.h"
 #include "switchstates.h"
 #include "eeprommem.h"
