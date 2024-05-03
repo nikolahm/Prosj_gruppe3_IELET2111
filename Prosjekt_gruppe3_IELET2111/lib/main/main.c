@@ -21,37 +21,31 @@
 #include "PWM.h"
 #include "RPM.h"
 #include "twi_aht10.h"
-
+//variables from fan reading
 volatile uint16_t signal_pulse = 0;
 volatile uint16_t signal_period = 0;
 volatile uint16_t rpm_from_inter;
-
-
-uint16_t varvar;
 
 int main ( void )
 {
 	PORT_init(); //initialize pwm
 	TCA0_init(); //initialize the TCA0
-	USART3.CTRLA |= USART_RXCIE_bm ; //
-	USART3_init ();
-	/* This delay invalidates the initial noise on the TX line , after device reset
-	. */
-	 
-	 EVSYS_init();
-	 TCB0_init();
+	USART3.CTRLA |= USART_RXCIE_bm ; // set usart read register
+	USART3_init (); //initialize usart3 
+	 EVSYS_init(); //initialize event system
+	 TCB0_init(); // initialize the TCB0
 	 		
 	 PORTB.DIR &= ~PIN5_bm;
 	 PORTB.PIN5CTRL |= PORT_PULLUPEN_bm;
 	 
 	_delay_ms (10) ;
-	initialize_rpm();
+	initialize_rpm(); //initialize rpm reading
 	sei();  //activate global interupts
 	_delay_ms (10) ;
-	twi_master_init_aht10();
+	twi_master_init_aht10(); //initialize setup for TWI to AHT10 sensor
 	_delay_ms (1000);
-	initialize_adresses();
-	automaticspeed_limiter=0;
+	initialize_adresses(); //updates last adresses used
+	automaticspeed_limiter=0; //limit times the rpm and eeprom is written to
 	 //adress_space_clear(); if adresses are to be cleared manualy
 	
 	// FUSE.SYSCFG0 |=(0<<1); // eeprom is saved under chip erase, optional
@@ -61,21 +55,14 @@ int main ( void )
 		//	_delay_ms(100);
 		cli();
 		automaticspeed_limiter++;
-		if(automaticspeed_limiter>10){
+		if(automaticspeed_limiter>10){ //10 iteration before 1 run
 		automaticspeed();//needs to be updated always
-		sei();
-		cli();
+		sei();//activate interupt for short time
+		cli(); //deactivate interupt
 		automaticspeed_limiter=0;
-		average_rpm(RPM,&current_fan_adress1,&store_rpm1,&n_count_adress1,start_fan_adress1);
+		average_rpm(RPM,&current_fan_adress1,&store_rpm1,&n_count_adress1,start_fan_adress1); //eeprom update for pred-values
 		}
-	
-// 		
-// 		printf("int: ");
-// 		
-// 		printf("%d\n",signal_pulse);
-		//////////////////////////////////////////////////////////////////
 		
-
 		if (data_ready_flag) { //if interupt on usart has happend, change to data ready flag if interupt is used
  			//recived = USART3_read();
 			c = recived; // Update 'c' with the received character
@@ -85,8 +72,6 @@ int main ( void )
 				command[index++] = c; 
 				if( index > MAX_COMMAND_LEN ) // if command to large,print newline
 				{
-			
-					
 					index = 0;
 					printf("\r");
 				}
@@ -99,7 +84,7 @@ int main ( void )
 		
 			}
 		}
-		sei();
+		sei();//activate interupts
 	}
 	
 	
@@ -107,7 +92,7 @@ int main ( void )
 
 
 
-ISR(TCB0_INT_vect)
+ISR(TCB0_INT_vect) //interupt for reading from the fans
 {
 	cli();
 	signal_pulse = TCB0.CCMP/4;
@@ -121,7 +106,7 @@ ISR(TCB0_INT_vect)
 }
 
 
-ISR (USART3_RXC_vect){
+ISR (USART3_RXC_vect){ //interupt for reciving information from usart
 	recived = USART3_read();  //variable containing information about the message
 	USART3.STATUS |= USART_RXCIF_bm; //usart status set to clear, so information can be recived next interupt
 	data_ready_flag = 1; //set flag to recived information on usart
