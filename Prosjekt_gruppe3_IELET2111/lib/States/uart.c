@@ -56,7 +56,7 @@ uint8_t USART3_read ()
 	{
 		;
 	}
-	uint8_t src = USART3.RXDATAL ;
+	uint8_t src = USART3.RXDATAL;
 	USART3_sendChar ( src );
 	return src ;
 }
