@@ -19,35 +19,16 @@
 #include "eeprommem.h"
 #include "PWM.h"
 #include "RPM.h"
-bool auto_flag= true;
-bool set_speed_flag = false;
+bool auto_flag= true; //activates temprature controlled speed and eeprom storing of data
+bool set_speed_flag = false; // bool to keep track of writing speed to fan
 
-/*
- volatile uint16_t current_fan_adress1;
- volatile uint16_t current_fan_adress2;
- volatile uint16_t current_fan_adress3;
- volatile uint16_t current_fan_adress4;
- volatile uint16_t current_fan_adress5;
- volatile uint16_t current_fan_adress6;
- volatile uint16_t current_fan_adress7;
- volatile uint16_t current_fan_adress8;
- 
-   volatile uint16_t n_count_adress1=1;
-   volatile uint16_t n_count_adress2=1;
-   volatile uint16_t n_count_adress3=1;
-   volatile uint16_t n_count_adress4=1;
-   volatile uint16_t n_count_adress5=1;
-   volatile uint16_t n_count_adress6=1;
-   volatile uint16_t n_count_adress7=1;
-   volatile uint16_t n_count_adress8=1;
-*/
 
 void startMenu(){
 	
 	//automaticspeed();
 	
 			
-	switch (start_var)
+	switch (start_var) //startmenu and its choices
 	{
 		case 1:
 		modesMenu();
@@ -66,11 +47,12 @@ void startMenu(){
 		for (uint8_t i = 0; i < 11; i++){
 			printf("\r\n");
 		}
+			//prints choices
 		printf("Start Menu\r\n");
 		printf("1 = Modes \r\n");
 		printf("2 = Data \r\n");
 		printf("3 = Configure address\r\n");
-		start_var = compareCommands(command,choicearray,3);
+		start_var = compareCommands(command,choicearray,3); //compares command to array of commads
 		modes_var = 255;
 		break;
 		}
@@ -79,22 +61,21 @@ void startMenu(){
 
 
 void modesMenu(){
-	switch (modes_var)
+	switch (modes_var) //switch case for different types of speed-controlling
 	{
 		case 1:
 		printf("Automatic speed activated\r\n");
-		auto_flag = true;
-		
+		auto_flag = true; //automatic speed is set
 		modes_var=255;
 		break;
 		case 2:
-		manualMenu();
+		manualMenu(); //manualspeed menu
 		break;
 		case 3:
-		printf("Additional\r\n");
+		printf("Additional\r\n"); //not implemented
 		break;
 		case 4:
-		printf("Going back ->\r\n");
+		printf("Going back ->\r\n"); // go back
 		start_var= 255;
 		break;
 		
@@ -107,7 +88,7 @@ void modesMenu(){
 		printf("2 = Manual Speed\r\n");
 		printf("3 = Additional\r\n");
 		printf("4 = Go Back\r\n");
-		modes_var = compareCommands(command,choicearray,5);
+		modes_var = compareCommands(command,choicearray,5); //compares command to command array
 		manual_var=255;
 		fan_var=255;
 		
@@ -117,17 +98,14 @@ void modesMenu(){
 void manualMenu(){
 	switch (manual_var)
 	{
-		
-		
-		case 1:
-		
+		case 1://set speed manually
 		auto_flag = false;
 		if (set_speed_flag)
 		{
-			fan_choice();
+			fan_choice(); //pick which fan to set the percentage speed to
 			
-		}else{ percentageVifte();
-			printf("Enter Percentage\r\n");
+		}else{ percentageVifte(); //pick speed
+			printf("Enter Percentage\r\n"); 
 			
 		}
 			
@@ -143,15 +121,11 @@ void manualMenu(){
 		for (uint8_t i = 0; i < 8; i++){
 			printf("\r\n");
 		}
-		manual_var = compareCommands(command,choicearray,5);
+		manual_var = compareCommands(command,choicearray,5); //compares command to command array
 		printf("Start Menu > Modes > Manual speed\r\n");
 		printf("1 = Percentage\r\n");
 		printf("2 = Go Back\r\n");
 		
-		
-		
-		
-	
 	}
 }
 
@@ -159,7 +133,7 @@ void percentageVifte() {
 	// Convert the entire command array to an integer
 	percentage_val = atoi(command);
 
-	// Alternatively, using strtol for better error handling
+	// use strtol better for errors
 	char* endptr;
 	percentage_val = (int) strtol(command, &endptr, 10);
 
@@ -170,18 +144,16 @@ void percentageVifte() {
 		// Handle error here
 		} else {
 		// Conversion successful
-		// Use percentage_val
 		// Check if the value is within the range of 0-100
 		if (percentage_val >= 0 && percentage_val <= 100) {
 			// Set a variable with the value of percentage_val
-			printf("Percentage value: %d\n", percentage_val);
+			printf("Percentage value: %d\n", percentage_val); //prints to user
 			fanspeed_val = percentage_val;
-			
 			fanspeed_val1 = percentage_val;
 			
 			printf(percentage_val);
 			
-			set_speed_flag = true;
+			set_speed_flag = true; //fanspeedchoice is activated
 			} else {
 			// Value is out of range
 			printf("Error: Value out of range, please select within the range of 0-100\n");
@@ -191,11 +163,10 @@ void percentageVifte() {
 }
 
 
-void fan_choice(){
+void fan_choice(){ //choose which fan that the speed is set to
 	switch(fan_var)
 	{
 		case 1:
-		
 		printf("Fan 1 set to :%d\r\n",percentage_val); 
 		printf("\r\n");
 		printf("Choose your next percentage:\r\n");
@@ -286,7 +257,7 @@ void fan_choice(){
 		printf(("8 = Fan 8\r\n"));
 		printf(("9 = Go Back->\r\n"));
 		
-		fan_var = compareCommands(command,choicearray,9);
+		fan_var = compareCommands(command,choicearray,9); //compares command to command array
 	}
 }
 void dataMenu(){
@@ -294,14 +265,14 @@ void dataMenu(){
 	{
 		case 1:
 
-		readeeprom();
+		readeeprom(); //read pred-data on fans
 		
 		break;
 		
 		case 2:
 		printf("erase all data\r\n");
-		
-		
+		adress_space_clear(); //rewriting will commence
+		data_var=255;
 		break;
 		
 		case 3:
@@ -315,34 +286,31 @@ void dataMenu(){
 		printf("2 = Erase all data\r\n");
 		printf("3 = Go Back->\r\n");
 		data_var = compareCommands(command,choicearray,9);
-	}	if (compareCommands(command, choicearray, 9) == 9){
-		
-}
+	}	
 }
 
-int automaticspeed(){
+int automaticspeed(){ //sets the speed of the fans with temprature data
 	
-	uint8_t setspeed =0;
-   if (auto_flag) {
+	uint8_t setspeed =0; //setmanual speed is false
+   if (auto_flag) { //if autospeed is activated
 	  
 	   setspeed = (read_aht10_data(0)) * 8 - 150; // Linear interpolation to calculate speed
 	   
 	   if (!(setspeed < 100 && setspeed > 0)) {
 		   setspeed = 0; // Set to default if speed is out of range
-		  speed_controll_0(setspeed);
+		  speed_controll_0(setspeed); //setspeed to zero
+		   printf("ERROR: speed is set to zero"\n);
+		   printf("ERROR reading data from temprature sensor");
 	   }
-	     
-		
-		speed_controll_0(setspeed);
-	  
+		speed_controll_0(setspeed); //setspeed
    }
-   return setspeed;
+   return setspeed; //returns value
 
    }
 
 
 void readeeprom(){
-	switch (read_val)
+	switch (read_val) //reads pred-value of each address occupied to specified fan
 	{
 	case 1:
 	read_data_rpm_eeprom(&current_fan_adress1,&start_fan_adress1,&n_count_adress1);
