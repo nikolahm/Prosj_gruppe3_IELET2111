@@ -182,7 +182,7 @@ void read_data_rpm_eeprom(volatile uint16_t *cur_adress,const uint16_t *start_ad
 	printf("\r\n");
 		eeprom_check_ready();
 
-		for (uint8_t i = 1; i <=len; i++){  //for lenght og occupied adresses
+		for (uint8_t i = 1; i <=len-1; i++){  //for lenght og occupied adresses
 			byte = eeprom_read_byte((*start_address)+i); // reads the pred-value for each occupied adress
 			
 			printf("Difference nr %u : %u", i,byte );  // prints the value of the pred value
