@@ -3,7 +3,7 @@
  * eeprommem.c
  *
  * Created: 14.04.2024 19:56:18
- *  Author: Meg
+ *  Author: HS
  */ 
 #include <avr/io.h>
 #include <util/delay.h>
