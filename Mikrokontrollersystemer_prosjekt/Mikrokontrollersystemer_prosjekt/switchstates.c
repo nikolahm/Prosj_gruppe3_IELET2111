@@ -2,7 +2,7 @@
  * switchstates.c
  *
  * Created: 11.04.2024 15:40:59
- *  Author: Meg
+ *  Author: HS
  */ 
 #define F_CPU 4000000UL
 #include <avr/io.h>
