@@ -79,10 +79,10 @@ void average_rpm(int *current_rpm,volatile uint16_t *current_address,volatile ui
 		//calculate difference between input and output signal
 		long int pred_var = (int)(((float)(RPM_INPUT1 - RPM_output1) / (float)RPM_INPUT1) * 100);
 		
-		// if the calculation is not in range-used for debugging
+		// when temp is changing, pred_var is too big, the if statement removes the value if its not in valid range
 		if (pred_var >= 100 || pred_var <0) {
 		pred_var=0;
-		} 
+		}
 
 		i++;
 		store_rpm1 += pred_var; //sums the value of difference to a store_rpm1
