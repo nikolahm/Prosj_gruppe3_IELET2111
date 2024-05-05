@@ -2,9 +2,9 @@
  * uart.c
  *
  * Created: 11.04.2024 15:32:08
- *  Author: Meg
+ *  Author: HS
  */ 
-//this code is partially from LF in mikrokontrollersystemer, it has been edited to adapt the project
+//this code is partially from LF 7 in mikrokontrollersystemer, it has been edited to adapt the project
 
 // Init function
 #define F_CPU 4000000UL
