@@ -3,7 +3,7 @@
  * switchstates1.h
  *
  * Created: 11.04.2024 15:44:04
- *  Author: Meg
+ *  Author: HS
  */ 
 
 
