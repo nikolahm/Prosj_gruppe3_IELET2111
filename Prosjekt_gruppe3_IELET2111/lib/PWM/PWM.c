@@ -33,7 +33,7 @@ void speed_controll_0 (uint8_t persentage)
 		TCA0.SPLIT.LCMP0 = PERIOD_VALUE;
 	} else if (persentage < 20) // Check if percentage is less than 20%
 	{
-		/* Set duty cycle to 20%, fan can't spin for  */
+		/* Set duty cycle to 20%, fan can't spin for values below 20 */
 		TCA0.SPLIT.LCMP0 = (uint8_t)((PERIOD_VALUE * 20 / 100));
 		/* Stopp fan compleatly if persentage = 0*/
 		if (persentage == 0){
