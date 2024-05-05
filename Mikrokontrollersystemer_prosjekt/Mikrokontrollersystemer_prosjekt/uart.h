@@ -2,7 +2,7 @@
  * uart.h
  *
  * Created: 11.04.2024 15:30:52
- *  Author: Meg
+ *  Author: HS
  */ 
 
 
