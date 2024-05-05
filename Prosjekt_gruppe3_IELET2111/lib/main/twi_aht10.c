@@ -27,7 +27,7 @@
 # include <util/delay.h>
 # include <stdio.h>
 #include <string.h>
-# include "usart.h"
+# include "uart.h"
 #include "twi_aht10.h"
 
 static void TWI0_M_init ( void ) {
