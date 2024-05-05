@@ -1,4 +1,5 @@
 /*
+** Dette programmet er hentet fra øving 7 mikrokontroller, med moderate endringer.
 * ielet2111_twi_slave_demo .c
 *
 * Created : 03.03.2023 10:47:14
